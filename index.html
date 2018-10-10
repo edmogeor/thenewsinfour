@@ -4,206 +4,190 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The news in four</title>
+    <title>The news in pixels</title>
     <style> body {padding: 0; margin: 0;} </style>
     <script src="libraries/p5.min.js"></script>
     <script src="libraries/p5.dom.min.js"></script>
     <script src="libraries/p5.sound.min.js"></script>
-    <script src="libraries/moment.js"></script>
     <script src="libraries/jquery-3.3.1.min.js"></script>
-    <script src="script/scaling.js"></script>
+    <script src="libraries/moment.min.js"></script>
+    <script src="libraries/tinycolor.js"></script>
+    <script src="script/frontend.js"></script>
     <script src="script/backend.js"></script>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="script/animate-jquery.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
     <style>
 
     @font-face {
-      font-family: 'Gotham-Medium';
-      src: url('assets/gotham_medium.ttf') format('truetype');
+      font-family: 'Inconsolata-Bold';
+      src: url('assets/inconsolata_bold.ttf') format('truetype');
     }
 
     @font-face {
-      font-family: 'Gotham-Light';
-      src: url('assets/gotham_light.otf') format('opentype');
-    }
-
-    @font-face {
-      font-family: 'Gotham-Thin';
-      src: url('assets/gotham_thin.otf') format('opentype');
-    }
-
-    h3 {
-      font-family: Gotham-Light;
-    }
-
-    h2 {
-      font-family: Gotham-Medium;
-    }
-
-    h1 {
-      font-family: Gotham-Medium;
-    }
-
-    h4 {
-      font-family: Gotham-Light;
-    }
-
-    h5 {
-      font-family: Gotham-Medium;
-    }
-
-    h6 {
-      font-family: Gotham-Thin;
+      font-family: 'Inconsolata-Regular';
+      src: url('assets/inconsolata_regular.ttf') format('truetype');
     }
 
     h7 {
-      font-family: Gotham-Thin;
+      font-family: 'Inconsolata-Bold';
+      color: white;
     }
 
-    #column1row1 {
-      grid-column: 1;
-      grid-row: 1;
+    h6 {
+      font-family: 'Inconsolata-Regular';
+      color: #5C5C5C;
     }
 
-    #column1row2 {
-      grid-column: 1;
-      grid-row: 2;
+    h2 {
+      font-family: 'Inconsolata-Regular';
+      color: white;
     }
 
-    #column2row1 {
-      grid-column: 2;
-      grid-row: 1;
-    }
-    #column2row2 {
-      grid-column: 2;
-      grid-row: 2;
+    h1 {
+      font-family: 'Inconsolata-Bold';
+      color: white;
     }
 
-    #number, #title {
+    #square-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    #grid-container {
+      /* visibility: hidden; */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #loading {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-top: 0;
+    }
+
+    #grid {
+      display: grid;
+      height: 100%;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-gap: 20px 20px;
+      grid-template-areas: ". . . . . . ." ". . . . . . ." ". . . . . . ." ". . . . . . ." ". . . . . . ." ". . . . . . ." ". . . . . . .";
+    }
+
+    .cell{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+
+    #header {
+      position:absolute;
+    }
+
+    #number{
+      float:left;
+    }
+
+    #title{
       margin: 0px;
     }
 
-    .grid-container {
-      display: grid;
-      height: 100%;
-      grid-template-rows: auto auto;
-      grid-template-areas: ". ." ". .";
-    }
 
-    #grid-parent {
-      top: 50%;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
+    #info-container{
       position: absolute;
+      background-color: black;
+      overflow: hidden;
+      z-index: 999;
+      display: none;
       visibility: hidden;
-      pointer-events: none;
     }
 
-    .words {
-      margin-top: 0;
-      margin-bottom: 0;
+    #info-header{
+      overflow: hidden;
     }
 
-    #source, #headline, #dateandtime {
-      margin-bottom: 0px;
+    #headline-container{
+      overflow: hidden;
     }
 
-    #word-container1,#word-container2,#word-container3,#word-container4  {
-      display: flex;
-      justify-content: space-between;
+
+    #sourcetext{
+      float: left;
+      margin:0px;
     }
-    #word-container1,#word-container2,#word-container3 {
-      margin-bottom: 57px;
+
+    #timetext {
+      float: right;
+    }
+
+    #timetext, #headlinetext{
+      margin:0px;
+    }
+
+    .pixelcanvas{
+      display: none;
+    }
+
+    #cursor {
+      display:none;
+      position: absolute;
+      height: 35px;
+      width:35px;
+      z-index:99999;
+      pointer-events:none;
+    }
+
+    #reload {
+      position: relative;
+      float: right;
+      height:0;
+      width:0;
+      transform: translateY(-25%);
+    }
+    #reload:hover {
+      cursor: pointer;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
     }
 
     body {
-      background: #ffce00; /* Old browsers */
-      background: -moz-linear-gradient(top, #ffce00 49%, #ffce00 49%, #ffffff 100%); /* FF3.6-15 */
-      background: -webkit-linear-gradient(top, #ffce00 49%,#ffce00 49%,#ffffff 100%); /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(to bottom, #ffce00 49%,#ffce00 49%,#ffffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffce00', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+      /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#5b5b5b+0,000000+62,000000+62 */
+      background: #5b5b5b; /* Old browsers */
+      background: -moz-linear-gradient(45deg, #5b5b5b 0%, #000000 62%, #000000 62%); /* FF3.6-15 */
+      background: -webkit-linear-gradient(45deg, #5b5b5b 0%,#000000 62%,#000000 62%); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(45deg, #5b5b5b 0%,#000000 62%,#000000 62%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5b5b5b', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
     }
-
-    html, body {margin: 0; height: 100%; overflow: hidden}
-
-    #page-loading {
-      display: flex;
-      justify-content: center;
-    }
-    #loading {
-      top: 50%;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
-      position: absolute;
-      text-align: center;
-    }
-    #particles-js{
-      width: 100%;
-      height: 100%;
-    }
-
-    #news_icon, #reload_icon {
-      cursor: pointer;
-      pointer-events:all;
-    }
-
     </style>
+
   </head>
   <body>
-    <div id=page-loading>
-      <div id=loading>
-        <img id="loading-animation" src="assets/loading.svg">
-        <h4 id="loading-text">Loading news</h4>
-      </div>
-    </div>
-    <div id="grid-parent">
-    <div class="grid-container">
-      <div id="column1row1">
-        <h3 style="float:left;margin-top: 0px;">N°</h3>
-        <h2 id="number">52214539</h3>
-      </div>
-      <div id="column2row1">
-        <h3 id="title">The news in four</h3>
-      </div>
-      <div id="column1row2">
-        <div id="words">
-        <div id="word-container1">
-          <h1 class="words" id="word1"></h1>
-          <h7 class="numbers" id="number1">52</h7>
-        </div>
-        <div id="word-container2">
-          <h1 class="words" id="word2"></h1>
-          <h7 class="numbers" id="number2">21</h7>
-        </div>
-        <div id="word-container3">
-          <h1 class="words" id="word3"></h1>
-          <h7 class="numbers" id="number3">45</h7>
-        </div>
-        <div id="word-container4">
-          <h1 class="words" id="word4"></h1>
-          <h7 class="numbers" id="number4">39</h7>
-        </div>
-        <img id="reload_icon" src="assets/reload_icon.svg">
-      </div>
-      </div>
-      <div id="column2row2">
-        <div id="info-container">
-        <img id="news_icon" src="assets/news_icon.svg">
-        <h4 id="source">Guardian</h4>
-        <h5 id="headline">Melania Trump glows with happiness as she leaves Donald for solo trip to Africa</h4>
-        <h6 id="dateandtime">13/21/08 15:23:00</h4>
-        </div>
-      </div>
-    </div>
+  <img id="cursor"src="assets/cursor1.png">
+  <div id="info-container">
+    <div id="info-header"><h2 id="sourcetext">Guardian</h2><h6 id="timetext">10/04/18 08:45</h6></div>
+    <div id="headline-container"><h1 id="headlinetext">“Patisserie Valerie shares suspended over '£20m accounting black hole'”</h1></div>
   </div>
-  <div id=particles-js></div>
-  <script>
-      particlesJS.load('particles-js', 'particles.json',
-      function(){
-        console.log('particles.json loaded...')
-      })
-  </script>
-
+  <div id="header">
+    <img id="reload"src="assets/reload_icon.svg">
+    <h7 id = "number">N° 52214539</h7>
+    <h6 id = "title">The news in pixels</h6>
+  </div>
+    <div id="square-container">
+      <h1 id="loading">Loading pixel data...</h1>
+      <div id="grid-container">
+        <div id="grid">
+        </div>
+      </div>
+    </div>
   </body>
 </html>
