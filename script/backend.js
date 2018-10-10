@@ -8,8 +8,10 @@ function loading() {
   getText();
 }
 
+var sourcelist = "the-huffington-post,bbc-news,cnn,the-new-york-times,fox-news,nbc-news,the-guardian-uk,the-telegraph,independent,metro,mirror"
+
 function loadAPI () {
-  $.getJSON("https://newsapi.org/v2/top-headlines?country=gb&apiKey=fcfbb627476e4bf39968dbe306b6c333", artPicker);
+  $.getJSON('https://newsapi.org/v2/everything?sources=' + sourcelist + '&language=en&pageSize=100&apiKey=fcfbb627476e4bf39968dbe306b6c333', artPicker);
 }
 
 var artSource, artHeadline, artDate, artChosen;
@@ -27,7 +29,7 @@ function artPicker(result) {
     artSource = result.articles[artNum].source.name
     artHeadline = result.articles[artNum].title
     artDate = result.articles[artNum].publishedAt
-    artDate = moment(artDate).format('hh:mm:ss MM/DD');
+    artDate = moment(artDate).format('HH:mm:ss – MM/DD');
   }
 }
 
@@ -74,7 +76,7 @@ function getText(result) {
       $("#word4").html(artWords[39-1] + '.');
 
       $("#source").html(artSource);
-      $("#headline").html('“' + artHeadline + '”');
+      $("#headline").html('“ ' + artHeadline + ' ”');
       $("#dateandtime").html(artDate);
 
       scaler();

@@ -29,7 +29,7 @@ function scaler() {
    $("#number").css("margin-top", 3.5*fontscale + "px");
    $("#number").css("margin-left", 30*fontscale + "px");
 
-   $("h5").css("line-height", 1 * linescale + "px");
+   $("h5").css("line-height", 1 * linescale);
 
    $("#word-container1").css("margin-bottom", 30*fontscale + "px");
    $("#word-container2").css("margin-bottom", 30*fontscale + "px");
