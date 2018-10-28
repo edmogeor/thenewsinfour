@@ -58,11 +58,8 @@ function getText(result) {
 
     artWords = artWords.split(' ')
 
-    if (artWords.length < 52) {
-      loading();
-    }
 
-    else if (artWords[52-1] != undefined) {
+    if (artWords[52+1] != undefined) {
       for (var j = artWords.length - 1; j >= 0; j--) {
         var chars = artWords[j].split('');
         if (chars.length > maxwordlimit || chars.length < minwordlimit ) {
@@ -70,10 +67,18 @@ function getText(result) {
         }
       }
 
-      $("#word1").html(artWords[52-1] + '.');
-      $("#word2").html(artWords[21-1] + '.');
-      $("#word3").html(artWords[45-1] + '.');
-      $("#word4").html(artWords[39-1] + '.');
+      if (artWords.length < 52) {
+        loading();
+      }
+
+      if (artWords[52+1] == undefined || artWords[21+1] == undefined || artWords[45+1] == undefined || artWords[39+1] == undefined) {
+        loading();
+      }
+
+      $("#word1").html(artWords[52+1] + '.');
+      $("#word2").html(artWords[21+1] + '.');
+      $("#word3").html(artWords[45+1] + '.');
+      $("#word4").html(artWords[39+1] + '.');
 
       $("#source").html(artSource);
       $("#headline").html('“ ' + artHeadline + ' ”');
